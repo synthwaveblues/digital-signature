@@ -6,9 +6,10 @@
     pip install pycryptodome
 
 # **How to Use**
-For the TRNG (True Random Number Generator) to work properly, make sure a folder named `images` contains at least one image file (e.g., .png, .jpg).
 
 ## TRNG Generator Setup
+
+For the TRNG (True Random Number Generator) to work properly, make sure a folder named `images` contains at least one image file (e.g., .png, .jpg).
 
 ## **After running the script, a menu will appear:**
 
