@@ -12,26 +12,26 @@ def generate_keys():
         f.write(priv_key)
     with open(pub_name, "wb") as f:
         f.write(pub_key)
-    print(f"\n✅ Klucze zapisane jako:\n  🔐 {priv_name}\n  🔓 {pub_name}")
+    print(f"\nKeys saved as:\n  {priv_name}\n  {pub_name}")
 
 def list_keys(pattern, label):
     keys = glob.glob(pattern)
     if not keys:
-        print(f"⚠️  Brak dostępnych kluczy {label}.")
+        print(f"No available {label} keys.")
         return None
-    print(f"\n📁 Dostępne klucze {label}:")
+    print(f"\nAvailable {label} keys:")
     for i, key in enumerate(keys):
         print(f"{i + 1}. {key}")
     while True:
-        choice = input(f"Wybierz numer klucza {label}: ").strip()
+        choice = input(f"Select the {label} key number: ").strip()
         if choice.isdigit() and 1 <= int(choice) <= len(keys):
             return keys[int(choice) - 1]
         else:
-            print("❗ Nieprawidłowy wybór. Spróbuj ponownie.")
+            print("Invalid selection. Try again.")
 
 def sign_file():
-    file_path = input("📄 Podaj ścieżkę do pliku do podpisania: ").strip()
-    priv_path = list_keys("private_*.pem", "prywatnego")
+    file_path = input("Enter the path to the file to sign: ").strip()
+    priv_path = list_keys("private_*.pem", "private")
     if not priv_path:
         return
     sig_path = file_path + ".sig"
@@ -40,15 +40,15 @@ def sign_file():
         with open(priv_path, "rb") as f:
             priv_key = f.read()
         sign_file_and_save_signature(priv_key, file_path, sig_path)
-        print(f"✅ Podpis zapisany jako: {sig_path}")
+        print(f"Signature saved as: {sig_path}")
     except FileNotFoundError:
-        print("❌ Nie znaleziono pliku klucza prywatnego.")
+        print("Private key file not found.")
 
 def verify_signature():
-    file_path = input("📄 Podaj ścieżkę do oryginalnego pliku: ").strip()
-    sig_path = input("📝 Podaj ścieżkę do pliku z podpisem (np. dokument.pdf.sig): ").strip()
+    file_path = input("Enter the path to the original file: ").strip()
+    sig_path = input("Enter the path to the signature file (e.g., document.pdf.sig): ").strip()
 
-    pub_key_path = list_keys("public_*.pem", "publicznego")
+    pub_key_path = list_keys("public_*.pem", "public")
     if not pub_key_path:
         return
 
@@ -57,20 +57,20 @@ def verify_signature():
             pub_key = f.read()
         result = verify_signature_from_file(pub_key, file_path, sig_path)
         if result:
-            print("✅ Podpis jest prawidłowy.")
+            print("Signature is valid.")
         else:
-            print("❌ Podpis NIE jest prawidłowy.")
+            print("Signature is NOT valid.")
     except FileNotFoundError:
-        print("❌ Nie znaleziono jednego z plików.")
+        print("One of the files was not found.")
 
 def main():
     while True:
         print("\n=== MENU ===")
-        print("1) Wygeneruj klucze")
-        print("2) Podpisz plik")
-        print("3) Zweryfikuj podpis")
-        print("4) Wyjście")
-        choice = input("Wybierz opcję (1/2/3/4): ").strip()
+        print("1) Generate keys")
+        print("2) Sign file")
+        print("3) Verify signature")
+        print("4) Exit")
+        choice = input("Choose an option (1/2/3/4): ").strip()
 
         if choice == "1":
             generate_keys()
@@ -79,10 +79,10 @@ def main():
         elif choice == "3":
             verify_signature()
         elif choice == "4":
-            print("👋 Zakończono program.")
+            print("Program terminated.")
             break
         else:
-            print("❗ Nieprawidłowa opcja. Spróbuj ponownie.")
+            print("Invalid option. Try again.")
 
 if __name__ == "__main__":
     main()
